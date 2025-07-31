@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Report.API.Data;
 using Report.API.Entities;
+using Confluent.Kafka;
 
 namespace Report.API.Controllers
 {
@@ -44,20 +45,25 @@ namespace Report.API.Controllers
 
         // POST: api/reports
         [HttpPost]
-        public async Task<IActionResult> RequestReport()
+        public async Task<IActionResult> RequestReport([FromBody] string location)
         {
-            var report = new Report.API.Entities.Report
+            var config = new ProducerConfig
             {
-                Id = Guid.NewGuid(),
-                RequestDate = DateTime.UtcNow,
-                Status = ReportStatus.Preparing,
-                Details = new List<ReportDetail>() // Başlangıçta boş liste
+                BootstrapServers = "localhost:9092"
             };
 
-            _context.Reports.Add(report);
-            await _context.SaveChangesAsync();
+            using var producer = new ProducerBuilder<Null, string>(config).Build();
 
-            return CreatedAtAction(nameof(GetReport), new { id = report.Id }, report);
+            try
+            {
+                var result = await producer.ProduceAsync("report-requests", new Message<Null, string> { Value = location });
+
+                return Ok(new { Message = $"Report request for '{location}' sent to Kafka." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error sending report request to Kafka: {ex.Message}");
+            }
         }
     }
 }
