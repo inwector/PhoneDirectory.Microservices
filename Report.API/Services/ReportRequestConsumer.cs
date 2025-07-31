@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Report.API.Data;
-using Report.API.Models;
+using Report.API.Entities;
 using System.Text.Json;
 
 namespace Report.API.Services
@@ -44,21 +44,27 @@ namespace Report.API.Services
                     using var scope = _scopeFactory.CreateScope();
                     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
-                    var report = new LocationReport
+                    var report = new Report.API.Entities.Report
                     {
                         Id = Guid.NewGuid(),
-                        Location = location,
-                        RequestedDate = DateTime.UtcNow,
+                        RequestDate = DateTime.UtcNow,
                         Status = ReportStatus.Preparing
                     };
 
-                    dbContext.LocationReports.Add(report);
+                    dbContext.Reports.Add(report);
                     await dbContext.SaveChangesAsync(stoppingToken);
 
-                    // TODO: Raporlama sorguları - burada Person ve Contact bilgisi DB’den çekilmeli
-                    // Şimdilik dummy veriler koyuyoruz
-                    report.PersonCount = 10;
-                    report.PhoneNumberCount = 25;
+                    var reportDetail = new ReportDetail
+                    {
+                        Id = Guid.NewGuid(),
+                        Location = location,
+                        PersonCount = 10,       // TODO: gerçek veriyi buraya koy
+                        PhoneNumberCount = 25,  // TODO: gerçek veriyi buraya koy
+                        ReportId = report.Id
+                    };
+
+                    dbContext.ReportDetails.Add(reportDetail);
+
                     report.Status = ReportStatus.Completed;
 
                     await dbContext.SaveChangesAsync(stoppingToken);

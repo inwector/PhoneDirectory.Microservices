@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Report.API.Models;
+using Report.API.Entities;
 
 namespace Report.API.Data
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        public DbSet<LocationReport> LocationReports { get; set; } = null!;
+        public DbSet<Report.API.Entities.Report> Reports => Set<Report.API.Entities.Report>();
+        public DbSet<ReportDetail> ReportDetails => Set<ReportDetail>();
     }
 }
