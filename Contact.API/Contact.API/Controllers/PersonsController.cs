@@ -64,8 +64,8 @@ namespace Contact.API.Controllers
             if (person == null)
                 return NotFound();
 
-            _context.ContactInfos.RemoveRange(person.ContactInfos); // önce iletişim bilgilerini sil
-            _context.Persons.Remove(person); // sonra kişiyi sil
+            _context.ContactInfos.RemoveRange(person.ContactInfos);
+            _context.Persons.Remove(person);
             await _context.SaveChangesAsync();
 
             return NoContent();
