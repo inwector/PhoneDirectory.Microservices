@@ -1,0 +1,21 @@
+# 1. Build aşaması - Uygulamayı derle
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /app
+
+# Proje dosyalarını kopyala ve bağımlılıkları indir
+COPY *.csproj ./
+RUN dotnet restore
+
+# Tüm kodu kopyala ve derle
+COPY . ./
+RUN dotnet publish -c Release -o out
+
+# 2. Runtime aşaması - Çalıştırma ortamı
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+WORKDIR /app
+
+# Derlenmiş uygulamayı kopyala
+COPY --from=build /app/out ./
+
+# Uygulamayı başlat
+ENTRYPOINT ["dotnet", "Contact.API.dll"]
