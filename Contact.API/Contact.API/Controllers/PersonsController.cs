@@ -1,6 +1,7 @@
 ﻿using Confluent.Kafka;
 using Contact.API.Data;
 using Contact.API.Models;
+using Contact.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,20 +15,19 @@ namespace Contact.API.Controllers
     public class PersonsController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IPersonService _personService;
 
-        public PersonsController(AppDbContext context)
+        public PersonsController(AppDbContext context, IPersonService personService)
         {
             _context = context;
+            _personService = personService;
         }
 
         // GET: api/persons
         [HttpGet]
         public async Task<IActionResult> GetAllPersons()
         {
-            var persons = await _context.Persons
-                .Include(p => p.ContactInfos)
-                .ToListAsync();
-
+            var persons = await _personService.GetAllAsync();
             return Ok(persons);
         }
 
@@ -35,13 +35,9 @@ namespace Contact.API.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPerson(Guid id)
         {
-            var person = await _context.Persons
-                .Include(p => p.ContactInfos)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
+            var person = await _personService.GetByIdAsync(id);
             if (person == null)
                 return NotFound();
-
             return Ok(person);
         }
 
@@ -49,27 +45,17 @@ namespace Contact.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePerson([FromBody] Person person)
         {
-            person.Id = Guid.NewGuid();
-            _context.Persons.Add(person);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetPerson), new { id = person.Id }, person);
+            var created = await _personService.CreateAsync(person);
+            return CreatedAtAction(nameof(GetPerson), new { id = created.Id }, created);
         }
 
         // DELETE: api/persons/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePerson(Guid id)
         {
-            var person = await _context.Persons
-                .Include(p => p.ContactInfos)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (person == null)
+            var deleted = await _personService.DeleteAsync(id);
+            if (!deleted)
                 return NotFound();
-
-            _context.ContactInfos.RemoveRange(person.ContactInfos);
-            _context.Persons.Remove(person);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
 
