@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "U30qfjx8lXY=",
+  "dgSpecHash": "ovnnvk8auxo=",
   "success": true,
   "projectFilePath": "C:\\Users\\izzet\\source\\repos\\PhoneDirectory.Microservices\\Contact.API\\Contact.API\\Contact.API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\izzet\\.nuget\\packages\\confluent.kafka\\2.11.0\\confluent.kafka.2.11.0.nupkg.sha512",
     "C:\\Users\\izzet\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
+    "C:\\Users\\izzet\\.nuget\\packages\\librdkafka.redist\\2.11.0\\librdkafka.redist.2.11.0.nupkg.sha512",
     "C:\\Users\\izzet\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\6.0.0\\microsoft.bcl.asyncinterfaces.6.0.0.nupkg.sha512",
     "C:\\Users\\izzet\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.3\\microsoft.codeanalysis.analyzers.3.3.3.nupkg.sha512",
     "C:\\Users\\izzet\\.nuget\\packages\\microsoft.codeanalysis.common\\4.5.0\\microsoft.codeanalysis.common.4.5.0.nupkg.sha512",

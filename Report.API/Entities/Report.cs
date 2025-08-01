@@ -4,8 +4,8 @@ namespace Report.API.Entities
 {
     public enum ReportStatus
     {
-        Preparing,
-        Completed
+        Preparing = 0,
+        Completed = 1
     }
 
     public class Report
