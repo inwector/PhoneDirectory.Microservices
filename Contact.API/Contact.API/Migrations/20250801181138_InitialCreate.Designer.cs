@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Contact.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250801180913_SecondDatabaseCreationMigration")]
-    partial class SecondDatabaseCreationMigration
+    [Migration("20250801181138_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
