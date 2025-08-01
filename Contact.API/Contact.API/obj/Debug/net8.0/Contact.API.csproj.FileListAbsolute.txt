@@ -124,7 +124,6 @@ C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\staticwebassets.build.json.cache
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\Contact..FF26C367.Up2Date
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\Contact.API.dll
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\refint\Contact.API.dll

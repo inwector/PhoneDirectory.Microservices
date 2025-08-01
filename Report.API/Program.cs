@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("http://localhost:5230", "https://localhost:7157");
 
 builder.Services.AddHostedService<ReportRequestConsumer>();
+builder.Services.AddHostedService<KafkaReportConsumer>();
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();

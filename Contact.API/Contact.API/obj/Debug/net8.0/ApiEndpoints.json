@@ -18,8 +18,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "person",
-        "Type": "Contact.API.Models.Person",
+        "Name": "dto",
+        "Type": "Contact.API.DTOs.PersonCreateDto",
         "IsRequired": true
       }
     ],

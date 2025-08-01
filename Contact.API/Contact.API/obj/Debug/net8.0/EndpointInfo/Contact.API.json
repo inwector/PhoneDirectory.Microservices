@@ -128,17 +128,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Person"
+                "$ref": "#/components/schemas/PersonCreateDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Person"
+                "$ref": "#/components/schemas/PersonCreateDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Person"
+                "$ref": "#/components/schemas/PersonCreateDto"
               }
             }
           }
@@ -244,6 +244,23 @@
         },
         "additionalProperties": false
       },
+      "ContactInfoCreateDto": {
+        "required": [
+          "content",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "content": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "$ref": "#/components/schemas/ContactType"
+          }
+        },
+        "additionalProperties": false
+      },
       "ContactType": {
         "enum": [
           0,
@@ -276,6 +293,36 @@
             "type": "array",
             "items": {
               "$ref": "#/components/schemas/ContactInfo"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonCreateDto": {
+        "required": [
+          "company",
+          "firstName",
+          "lastName"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "lastName": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "company": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "contactInfos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContactInfoCreateDto"
             },
             "nullable": true
           }

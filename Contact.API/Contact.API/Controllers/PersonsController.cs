@@ -1,5 +1,6 @@
 ﻿using Confluent.Kafka;
 using Contact.API.Data;
+using Contact.API.DTOs;
 using Contact.API.Models;
 using Contact.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -43,10 +44,29 @@ namespace Contact.API.Controllers
 
         // POST: api/persons
         [HttpPost]
-        public async Task<IActionResult> CreatePerson([FromBody] Person person)
+        public async Task<IActionResult> CreatePerson([FromBody] PersonCreateDto dto)
         {
-            var created = await _personService.CreateAsync(person);
-            return CreatedAtAction(nameof(GetPerson), new { id = created.Id }, created);
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var person = new Person
+            {
+                Id = Guid.NewGuid(),
+                FirstName = dto.FirstName,
+                LastName = dto.LastName,
+                Company = dto.Company,
+                ContactInfos = dto.ContactInfos.Select(ci => new ContactInfo
+                {
+                    Id = Guid.NewGuid(),
+                    Content = ci.Content,
+                    Type = ci.Type
+                }).ToList()
+            };
+
+            await _context.Persons.AddAsync(person);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetPerson), new { id = person.Id }, null);
         }
 
         // DELETE: api/persons/{id}
