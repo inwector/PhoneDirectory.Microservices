@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Report.API.Data;
 using Report.API.Services;
 
@@ -9,10 +9,16 @@ builder.WebHost.UseUrls("http://localhost:5230", "https://localhost:7157");
 builder.Services.AddHostedService<ReportRequestConsumer>();
 builder.Services.AddHostedService<KafkaReportConsumer>();
 
+
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddHttpClient<ContactApiClient>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7130");
+});
 
 var app = builder.Build();
 

@@ -184,3 +184,4 @@ C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Report.API\obj\Debug\ne
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Report.API\obj\Debug\net8.0\Report.API.pdb
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Report.API\obj\Debug\net8.0\Report.API.genruntimeconfig.cache
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Report.API\obj\Debug\net8.0\ref\Report.API.dll
+C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Report.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

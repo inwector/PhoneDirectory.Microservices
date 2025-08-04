@@ -12,8 +12,8 @@ using Report.API.Data;
 namespace Report.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250801092959_InitialCreate_2")]
-    partial class InitialCreate_2
+    [Migration("20250803190502_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,6 +30,10 @@ namespace Report.API.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("timestamp with time zone");

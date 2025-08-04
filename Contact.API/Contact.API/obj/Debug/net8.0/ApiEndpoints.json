@@ -71,8 +71,8 @@
         "IsRequired": true
       },
       {
-        "Name": "contactInfo",
-        "Type": "Contact.API.Models.ContactInfo",
+        "Name": "contactAddDto",
+        "Type": "Contact.API.DTOs.ContactAddDto",
         "IsRequired": true
       }
     ],

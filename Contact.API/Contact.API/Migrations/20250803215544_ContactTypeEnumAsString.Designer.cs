@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Contact.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250801181138_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250803215544_ContactTypeEnumAsString")]
+    partial class ContactTypeEnumAsString
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,8 +38,9 @@ namespace Contact.API.Migrations
                     b.Property<Guid>("PersonId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

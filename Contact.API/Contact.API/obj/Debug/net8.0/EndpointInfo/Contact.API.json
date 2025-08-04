@@ -25,17 +25,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ContactInfo"
+                "$ref": "#/components/schemas/ContactAddDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ContactInfo"
+                "$ref": "#/components/schemas/ContactAddDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ContactInfo"
+                "$ref": "#/components/schemas/ContactAddDto"
               }
             }
           }
@@ -220,7 +220,7 @@
   },
   "components": {
     "schemas": {
-      "ContactInfo": {
+      "ContactAddDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -228,7 +228,8 @@
             "format": "uuid"
           },
           "type": {
-            "$ref": "#/components/schemas/ContactType"
+            "type": "string",
+            "nullable": true
           },
           "content": {
             "type": "string",
@@ -237,9 +238,6 @@
           "personId": {
             "type": "string",
             "format": "uuid"
-          },
-          "person": {
-            "$ref": "#/components/schemas/Person"
           }
         },
         "additionalProperties": false
@@ -269,35 +267,6 @@
         ],
         "type": "integer",
         "format": "int32"
-      },
-      "Person": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "firstName": {
-            "type": "string",
-            "nullable": true
-          },
-          "lastName": {
-            "type": "string",
-            "nullable": true
-          },
-          "company": {
-            "type": "string",
-            "nullable": true
-          },
-          "contactInfos": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/ContactInfo"
-            },
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
       },
       "PersonCreateDto": {
         "required": [

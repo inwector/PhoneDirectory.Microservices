@@ -28,6 +28,10 @@ namespace Report.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("timestamp with time zone");
 

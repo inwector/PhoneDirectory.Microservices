@@ -25,27 +25,28 @@ namespace Report.API.Services
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = _configuration["Kafka:BootstrapServers"],
-                GroupId = "report-api-group",
+                BootstrapServers = "localhost:9092",
+                GroupId = "test-group",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
             using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
-            consumer.Subscribe("report-requests");
+            consumer.Subscribe("test-topic");
 
-            while (!stoppingToken.IsCancellationRequested)
+            try
             {
-                try
+                while (!stoppingToken.IsCancellationRequested)
                 {
-                    var result = consumer.Consume(stoppingToken);
+                    var result = consumer.Consume();
+
                     var message = result.Message.Value;
 
-                    var payload = JsonSerializer.Deserialize<ReportRequestMessage>(message);
-                    if (payload is null || string.IsNullOrWhiteSpace(payload.Location))
-                    {
-                        _logger.LogWarning("Invalid message received: {Message}", message);
-                        continue;
-                    }
+                        var payload = JsonSerializer.Deserialize<ReportRequestMessage>(message);
+                        if (payload is null || string.IsNullOrWhiteSpace(payload.Location))
+                        {
+                            _logger.LogWarning("Invalid message received: {Message}", message);
+                            continue;
+                        }
 
                     using var scope = _serviceProvider.CreateScope();
                     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -63,14 +64,10 @@ namespace Report.API.Services
 
                     _logger.LogInformation("Report created for location: {Location}", payload.Location);
                 }
-                catch (ConsumeException ex)
-                {
-                    _logger.LogError(ex, "Kafka consume error.");
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Unexpected error.");
-                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
             }
 
             consumer.Close();

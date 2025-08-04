@@ -59,14 +59,14 @@ namespace Contact.API.Controllers
                 {
                     Id = Guid.NewGuid(),
                     Content = ci.Content,
-                    Type = ci.Type
+                    Type = (Models.ContactType)ci.Type
                 }).ToList()
             };
 
             await _context.Persons.AddAsync(person);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetPerson), new { id = person.Id }, null);
+            return Ok(new {personid = person.Id});
         }
 
         // DELETE: api/persons/{id}
@@ -91,7 +91,7 @@ namespace Contact.API.Controllers
                 return NotFound($"Person with id {personId} not found.");
 
             var locationInfo = person.ContactInfos
-                .FirstOrDefault(ci => ci.Type == ContactType.Location)?.Content;
+                .FirstOrDefault(ci => ci.Type == Models.ContactType.Location)?.Content;
 
             if (string.IsNullOrEmpty(locationInfo))
                 return BadRequest("No location info found for this person.");

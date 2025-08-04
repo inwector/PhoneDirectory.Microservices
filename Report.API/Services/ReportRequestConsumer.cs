@@ -1,10 +1,13 @@
 ﻿using Confluent.Kafka;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Report.API.Data;
 using Report.API.Entities;
-using System.Text.Json;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Report.API.Services
 {
@@ -24,8 +27,8 @@ namespace Report.API.Services
         {
             var config = new ConsumerConfig
             {
-                GroupId = "report-service-group",
                 BootstrapServers = "localhost:9092",
+                GroupId = "report-service-group",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
@@ -37,7 +40,6 @@ namespace Report.API.Services
                 while (!stoppingToken.IsCancellationRequested)
                 {
                     var consumeResult = consumer.Consume(stoppingToken);
-                    _logger.LogInformation($"Received report request: {consumeResult.Message.Value}");
 
                     var location = consumeResult.Message.Value;
 
@@ -53,6 +55,12 @@ namespace Report.API.Services
 
                     dbContext.Reports.Add(report);
                     await dbContext.SaveChangesAsync(stoppingToken);
+
+
+
+
+
+
 
                     var reportDetail = new ReportDetail
                     {
@@ -74,7 +82,11 @@ namespace Report.API.Services
             }
             catch (OperationCanceledException)
             {
-                _logger.LogInformation("Kafka consumer stopping.");
+                _logger.LogInformation("Kafka consumer is stopping.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while consuming Kafka messages");
             }
             finally
             {
