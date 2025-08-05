@@ -8,7 +8,7 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Contact.API.Tests
+namespace Contact.API.Tests.Controllers
 {
     public class LocationControllerTests
     {
@@ -62,8 +62,8 @@ namespace Contact.API.Tests
             var result = await controller.Stats("", default);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(okResult.Value);
-            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            var json = JsonConvert.SerializeObject(okResult.Value);
+            var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
 
             Assert.Equal("", data["location"].ToString());
             Assert.Equal(0, Convert.ToInt32(data["personCount"]));
@@ -79,8 +79,8 @@ namespace Contact.API.Tests
             var result = await controller.Stats("   ", default);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(okResult.Value);
-            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            var json = JsonConvert.SerializeObject(okResult.Value);
+            var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
 
             Assert.Equal("   ", data["location"].ToString());
             Assert.Equal(0, Convert.ToInt32(data["personCount"]));
@@ -96,8 +96,8 @@ namespace Contact.API.Tests
             var result = await controller.Stats("123", default);
 
             var okResult = Assert.IsType<OkObjectResult>(result);
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(okResult.Value);
-            var data = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            var json = JsonConvert.SerializeObject(okResult.Value);
+            var data = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
 
             Assert.Equal("123", data["location"].ToString());
             Assert.Equal(0, Convert.ToInt32(data["personCount"]));

@@ -14,7 +14,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Contact.API.Tests
+namespace Contact.API.Tests.Controllers
 {
     public class PersonsControllerTests
     {
