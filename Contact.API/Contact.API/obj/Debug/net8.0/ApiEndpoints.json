@@ -135,21 +135,5 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Contact.API.Controllers.PersonsController",
-    "Method": "RequestReport",
-    "RelativePath": "api/Persons/{personId}/request-report",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "personId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   }
 ]

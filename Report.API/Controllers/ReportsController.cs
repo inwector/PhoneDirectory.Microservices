@@ -65,7 +65,6 @@ namespace Report.API.Controllers
         [HttpPost]
         public async Task<IActionResult> RequestReport([FromBody] CreateReportRequest request)
         {
-            // Input validation
             if (request == null || string.IsNullOrWhiteSpace(request.Location))
             {
                 return BadRequest("Location is required");

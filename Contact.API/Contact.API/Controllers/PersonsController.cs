@@ -93,37 +93,5 @@ namespace Contact.API.Controllers
             return Ok(string.Format("User with the id {0} and the user's all information was deleted.", id));
         }
 
-        // POST: api/persons/{personId}/request-report
-        [HttpPost("{personId}/request-report")]
-        public async Task<IActionResult> RequestReport(Guid personId, [FromServices] IProducer<Null, string> kafkaProducer)
-        {
-            var person = await _context.Persons
-                .Include(p => p.ContactInfos)
-                .FirstOrDefaultAsync(p => p.Id == personId);
-
-            if (person == null)
-                return NotFound($"Person with id {personId} not found.");
-
-            var locationInfo = person.ContactInfos
-                .FirstOrDefault(ci => ci.Type == Models.ContactType.Location)?.Content;
-
-            if (string.IsNullOrEmpty(locationInfo))
-                return BadRequest("No location info found for this person.");
-
-            var reportRequest = new
-            {
-                Location = locationInfo
-            };
-
-            var jsonMessage = JsonSerializer.Serialize(reportRequest);
-
-            await kafkaProducer.ProduceAsync("report-requests", new Message<Null, string>
-            {
-                Value = jsonMessage
-            });
-
-            return Ok(new { message = $"Report request for '{locationInfo}' sent to Kafka." });
-        }
-
     }
 }
