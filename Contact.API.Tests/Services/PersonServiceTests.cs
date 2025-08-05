@@ -3,6 +3,8 @@ using Contact.API.Models;
 using Contact.API.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -10,75 +12,115 @@ namespace Contact.API.Tests.Services
 {
     public class PersonServiceTests
     {
-        private readonly AppDbContext _context;
-        private readonly PersonService _service;
-
-        public PersonServiceTests()
+        private AppDbContext GetDbContext()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString())
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
-            _context = new AppDbContext(options);
-            _service = new PersonService(_context);
+            return new AppDbContext(options);
+        }
+
+        private PersonService GetService(AppDbContext context)
+        {
+            return new PersonService(context);
         }
 
         [Fact]
-        public async Task CreateAsync_ShouldAddPerson()
+        public async Task CreateAsync_Should_AddPerson_And_ReturnWithId()
         {
+            var context = GetDbContext();
+            var service = GetService(context);
+
             var person = new Person
             {
-                FirstName = "Ahmet",
-                LastName = "Yılmaz",
-                Company = "Test Co"
+                FirstName = "John",
+                LastName = "Doe",
+                Company = "Acme Corp"
             };
 
-            var createdPerson = await _service.CreateAsync(person);
+            var result = await service.CreateAsync(person);
 
-            Assert.NotNull(createdPerson);
-            Assert.NotEqual(Guid.Empty, createdPerson.Id);
-
-            var dbPerson = await _context.Persons.FindAsync(createdPerson.Id);
-            Assert.NotNull(dbPerson);
-            Assert.Equal("Ahmet", dbPerson.FirstName);
+            Assert.NotEqual(Guid.Empty, result.Id);
+            Assert.Single(context.Persons);
         }
 
         [Fact]
-        public async Task GetByIdAsync_ShouldReturnPerson_WhenExists()
+        public async Task GetAllAsync_Should_ReturnAllPersons()
         {
-            var person = new Person { FirstName = "Mehmet", LastName = "Kara", Company = "ABC" };
-            var created = await _service.CreateAsync(person);
+            var context = GetDbContext();
+            context.Persons.AddRange(
+                new Person { Id = Guid.NewGuid(), FirstName = "A", LastName = "B", Company = "C" },
+                new Person { Id = Guid.NewGuid(), FirstName = "X", LastName = "Y", Company = "Z" }
+            );
+            await context.SaveChangesAsync();
 
-            var fetched = await _service.GetByIdAsync(created.Id);
+            var service = GetService(context);
+            var result = await service.GetAllAsync();
 
-            Assert.NotNull(fetched);
-            Assert.Equal("Mehmet", fetched.FirstName);
+            Assert.Equal(2, result.Count);
         }
 
         [Fact]
-        public async Task GetByIdAsync_ShouldReturnNull_WhenNotFound()
+        public async Task GetByIdAsync_Should_ReturnPersonWithContactInfos()
         {
-            var fetched = await _service.GetByIdAsync(Guid.NewGuid());
-            Assert.Null(fetched);
+            var context = GetDbContext();
+            var personId = Guid.NewGuid();
+            context.Persons.Add(new Person
+            {
+                Id = personId,
+                FirstName = "John",
+                LastName = "Doe",
+                Company = "CompanyX",
+                ContactInfos = new List<ContactInfo>
+                {
+                    new ContactInfo { Id = Guid.NewGuid(), Type = ContactType.EmailAddress, Content = "test@example.com" }
+                }
+            });
+            await context.SaveChangesAsync();
+
+            var service = GetService(context);
+            var result = await service.GetByIdAsync(personId);
+
+            Assert.NotNull(result);
+            Assert.Equal("John", result.FirstName);
+            Assert.Single(result.ContactInfos);
         }
 
         [Fact]
-        public async Task DeleteAsync_ShouldReturnTrue_WhenPersonExists()
+        public async Task DeleteAsync_Should_RemovePersonAndContactInfos_WhenExists()
         {
-            var person = new Person { FirstName = "Selin", LastName = "Güneş" };
-            var created = await _service.CreateAsync(person);
+            var context = GetDbContext();
+            var personId = Guid.NewGuid();
+            context.Persons.Add(new Person
+            {
+                Id = personId,
+                FirstName = "A",
+                LastName = "B",
+                Company = "C",
+                ContactInfos = new List<ContactInfo>
+                {
+                    new ContactInfo { Id = Guid.NewGuid(), Type = ContactType.PhoneNumber, Content = "123" }
+                }
+            });
+            await context.SaveChangesAsync();
 
-            var result = await _service.DeleteAsync(created.Id);
+            var service = GetService(context);
+            var result = await service.DeleteAsync(personId);
 
             Assert.True(result);
-            var dbPerson = await _context.Persons.FindAsync(created.Id);
-            Assert.Null(dbPerson);
+            Assert.Empty(context.Persons);
+            Assert.Empty(context.ContactInfos);
         }
 
         [Fact]
-        public async Task DeleteAsync_ShouldReturnFalse_WhenPersonDoesNotExist()
+        public async Task DeleteAsync_Should_ReturnFalse_WhenPersonDoesNotExist()
         {
-            var result = await _service.DeleteAsync(Guid.NewGuid());
+            var context = GetDbContext();
+            var service = GetService(context);
+
+            var result = await service.DeleteAsync(Guid.NewGuid());
+
             Assert.False(result);
         }
     }

@@ -130,3 +130,4 @@ C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\Contact.API.pdb
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\Contact.API.genruntimeconfig.cache
 C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\ref\Contact.API.dll
+C:\Users\izzet\source\repos\PhoneDirectory.Microservices\Contact.API\Contact.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
