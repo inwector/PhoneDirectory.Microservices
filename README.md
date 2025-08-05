@@ -197,7 +197,7 @@ Project uses development and master branches:
 
 ## İletişim
 
-Proje ile ilgili sorularınızı izzet.buyukkurkcu@gmail.com adresine iletebilirsiniz.
+Proje ile ilgili sorularınızı izzet.buyukkurkcu@gmail.com adresine iletebilirsiniz. 
 
 ## Lisans
 
