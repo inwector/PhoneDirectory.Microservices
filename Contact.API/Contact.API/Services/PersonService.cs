@@ -18,7 +18,7 @@ namespace Contact.API.Services
 
         public async Task<List<Person>> GetAllAsync()
         {
-            return await _context.Persons.Include(p => p.ContactInfos).ToListAsync();
+            return await _context.Persons.ToListAsync();
         }
 
         public async Task<Person?> GetByIdAsync(Guid id)

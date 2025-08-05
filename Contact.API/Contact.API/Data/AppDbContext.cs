@@ -12,7 +12,6 @@ namespace Contact.API.Data
 
         public DbSet<Person> Persons { get; set; }
         public DbSet<ContactInfo> ContactInfos { get; set; }
-        public DbSet<LocationReport> LocationReports { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

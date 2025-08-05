@@ -109,6 +109,28 @@
         }
       }
     },
+    "/api/location/{location}": {
+      "post": {
+        "tags": [
+          "Location"
+        ],
+        "parameters": [
+          {
+            "name": "location",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Persons": {
       "get": {
         "tags": [

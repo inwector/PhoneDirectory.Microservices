@@ -68,12 +68,12 @@ namespace Contact.API.Controllers
                 .FirstOrDefaultAsync(ci => ci.Id == id && ci.PersonId == personId);
 
             if (contactInfo == null)
-                return NotFound();
+            return NotFound(string.Format("No record for personId {0} and id {1} .", personId, id));
 
             _context.ContactInfos.Remove(contactInfo);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(string.Format("record for personId {0} and id {1} was deleted.", personId, id));
         }
     }
 }

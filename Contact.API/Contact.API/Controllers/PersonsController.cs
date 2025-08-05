@@ -39,7 +39,21 @@ namespace Contact.API.Controllers
             var person = await _personService.GetByIdAsync(id);
             if (person == null)
                 return NotFound();
-            return Ok(person);
+
+            var personDto = new
+            {
+                person.Id,
+                person.FirstName,
+                person.LastName,
+                person.Company,
+                ContactInfos = person.ContactInfos.Select(ci => new
+                {
+                    Type = ci.Type.ToString(),
+                    ci.Content
+                }).ToList()
+            };
+
+            return Ok(personDto);
         }
 
         // POST: api/persons
@@ -75,8 +89,8 @@ namespace Contact.API.Controllers
         {
             var deleted = await _personService.DeleteAsync(id);
             if (!deleted)
-                return NotFound();
-            return NoContent();
+                return NotFound("A person with this id doesn't exist");
+            return Ok(string.Format("User with the id {0} and the user's all information was deleted.", id));
         }
 
         // POST: api/persons/{personId}/request-report

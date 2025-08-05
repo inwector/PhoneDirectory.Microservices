@@ -16,7 +16,7 @@ namespace Contact.API.Tests.Services
         public PersonServiceTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseInMemoryDatabase(Guid.NewGuid().ToString()) // Her test için temiz DB
+                .UseInMemoryDatabase(Guid.NewGuid().ToString())
                 .Options;
 
             _context = new AppDbContext(options);

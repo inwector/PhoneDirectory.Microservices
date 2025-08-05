@@ -1,4 +1,5 @@
 ﻿using Report.API.DTOs;
+using System.Text.Json;
 
 namespace Report.API.Services
 {
@@ -44,6 +45,26 @@ namespace Report.API.Services
         public async Task<HttpResponseMessage> RequestReportAsync(Guid personId)
         {
             return await _httpClient.PostAsync($"/api/persons/{personId}/request-report", null);
+        }
+
+        public async Task<ReportResultStatsDto> RequestStatsAsync(string locationName)
+        {
+            var response = await _httpClient.PostAsync($"/api/location/{locationName}", null);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var result = JsonSerializer.Deserialize<ReportResultStatsDto>(json, options);
+            return result;
         }
     }
 

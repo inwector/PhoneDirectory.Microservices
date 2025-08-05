@@ -26,20 +26,20 @@ namespace Contact.API.Controllers
             ? parsedEnum
             : Models.ContactType.Location;
 
-            var contactTypeList = _appDbContext.ContactInfos.Where(x=>x.Type == contactType).ToList();
+            var contactTypeList = _appDbContext.ContactInfos.Where(x=>x.Type == contactType && x.Content == location).ToList();
 
-            var persons = contactTypeList.Select(x=>x.PersonId).ToList();
+            var persons = contactTypeList.Select(x=>x.PersonId).Distinct().ToList();
 
             var phoneNumberCount = 0;
 
             foreach (var item in persons) {
-                var count = _appDbContext.ContactInfos.Where(x => x.PersonId == item && x.Type.ToString() == "PhoneNumber").Count();
+                var count = _appDbContext.ContactInfos.Where(x => x.PersonId == item && x.Type == Models.ContactType.PhoneNumber).Count();
                 phoneNumberCount += count;
             };
 
             var personCount = persons.Count();
 
-            return Ok(new { personCount, phoneNumberCount }); // BUNU DÖNECEĞİZ REPORT.API'YE, REPORT.API DE REPORTS TABLOSUNU GÜNCELLEYECEK VE REPORTDETAILS TABLOSUNA KAYIT GİRECEK, EK OLARAK REPORT.API BUNU YOLLARKEN VERİ TABANINDA REPORTS TABLOSUNA KAYDI GİRMELİ Kİ KİŞİ BUNU ARADIĞINDA "VERİLER GELECEK" ŞEKLİNDE BİR MESAJ GÖREBİLSİN. REPORT.API UNIT TESTLERI VAR, O KADAR.
+            return Ok(new { location, personCount, phoneNumberCount });
         }
     }
 }

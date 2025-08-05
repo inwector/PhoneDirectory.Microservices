@@ -119,7 +119,6 @@ public class PersonsControllerTests
 
         Assert.IsType<NoContentResult>(result);
 
-        // Ayrıca kişinin gerçekten silindiğini doğrula
         var deletedPerson = await context.Persons.FindAsync(personId);
         Assert.Null(deletedPerson);
     }
@@ -140,17 +139,14 @@ public class PersonsControllerTests
     [Fact]
     public async Task RequestReport_ReturnsOk_WhenLocationExists()
     {
-        // Arrange
         var personId = Guid.NewGuid();
 
-        // AppDbContext için InMemoryDb setup et (örnek)
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase(databaseName: "TestDb")
             .Options;
 
         using var context = new AppDbContext(options);
 
-        // Test kişisi ve iletişim bilgisi ekle
         context.Persons.Add(new Person
         {
             Id = personId,
@@ -163,17 +159,16 @@ public class PersonsControllerTests
         });
         context.SaveChanges();
 
-        // Mock Kafka producer ayarla
         var mockProducer = new Mock<IProducer<Null, string>>();
         mockProducer
             .Setup(p => p.ProduceAsync(It.IsAny<string>(), It.IsAny<Message<Null, string>>(), default))
             .ReturnsAsync(new DeliveryResult<Null, string> { Status = PersistenceStatus.Persisted });
 
-        var controller = new PersonsController(context, null); // personService null olabilir çünkü kullanılmıyor
-                                                               // Act
+        var controller = new PersonsController(context, null); 
+                                                               
         var result = await controller.RequestReport(personId, mockProducer.Object);
 
-        // Assert
+        
         var okResult = Assert.IsType<OkObjectResult>(result);
         Assert.Contains("Report request for", okResult.Value.ToString());
     }
@@ -208,7 +203,7 @@ public class PersonsControllerTests
             FirstName = "Test",
             LastName = "User",
             ContactInfos = new List<ContactInfo>()
-            // Konum bilgisi yok
+            
         });
         context.SaveChanges();
 
