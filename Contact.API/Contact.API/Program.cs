@@ -1,6 +1,8 @@
 ﻿using Confluent.Kafka;
 using Contact.API.Data;
+using Contact.API.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +15,13 @@ builder.Services.AddSingleton<IProducer<Null, string>>(sp =>
     return new ProducerBuilder<Null, string>(config).Build();
 });
 
-builder.Services.AddControllers();
+builder.Services.AddScoped<IPersonService, PersonService>();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

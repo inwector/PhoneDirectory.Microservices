@@ -17,5 +17,6 @@ namespace Contact.API.Models
 
         public Guid PersonId { get; set; }
         public Person Person { get; set; } = null!;
+
     }
 }

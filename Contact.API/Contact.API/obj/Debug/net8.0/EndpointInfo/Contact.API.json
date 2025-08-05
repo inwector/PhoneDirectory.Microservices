@@ -25,17 +25,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ContactInfo"
+                "$ref": "#/components/schemas/ContactAddDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/ContactInfo"
+                "$ref": "#/components/schemas/ContactAddDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/ContactInfo"
+                "$ref": "#/components/schemas/ContactAddDto"
               }
             }
           }
@@ -109,6 +109,28 @@
         }
       }
     },
+    "/api/location/{location}": {
+      "post": {
+        "tags": [
+          "Location"
+        ],
+        "parameters": [
+          {
+            "name": "location",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Persons": {
       "get": {
         "tags": [
@@ -128,17 +150,17 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Person"
+                "$ref": "#/components/schemas/PersonCreateDto"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/Person"
+                "$ref": "#/components/schemas/PersonCreateDto"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/Person"
+                "$ref": "#/components/schemas/PersonCreateDto"
               }
             }
           }
@@ -220,7 +242,7 @@
   },
   "components": {
     "schemas": {
-      "ContactInfo": {
+      "ContactAddDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -228,7 +250,8 @@
             "format": "uuid"
           },
           "type": {
-            "$ref": "#/components/schemas/ContactType"
+            "type": "string",
+            "nullable": true
           },
           "content": {
             "type": "string",
@@ -237,9 +260,23 @@
           "personId": {
             "type": "string",
             "format": "uuid"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ContactInfoCreateDto": {
+        "required": [
+          "content",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "content": {
+            "minLength": 1,
+            "type": "string"
           },
-          "person": {
-            "$ref": "#/components/schemas/Person"
+          "type": {
+            "$ref": "#/components/schemas/ContactType"
           }
         },
         "additionalProperties": false
@@ -253,29 +290,30 @@
         "type": "integer",
         "format": "int32"
       },
-      "Person": {
+      "PersonCreateDto": {
+        "required": [
+          "company",
+          "firstName",
+          "lastName"
+        ],
         "type": "object",
         "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
           "firstName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "lastName": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "company": {
-            "type": "string",
-            "nullable": true
+            "minLength": 1,
+            "type": "string"
           },
           "contactInfos": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ContactInfo"
+              "$ref": "#/components/schemas/ContactInfoCreateDto"
             },
             "nullable": true
           }

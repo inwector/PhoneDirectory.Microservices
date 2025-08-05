@@ -17,7 +17,7 @@ namespace Contact.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -35,41 +35,15 @@ namespace Contact.API.Migrations
                     b.Property<Guid>("PersonId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PersonId");
 
                     b.ToTable("ContactInfos");
-                });
-
-            modelBuilder.Entity("Contact.API.Models.LocationReport", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("PersonCount")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("PhoneNumberCount")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("RequestedDate")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("LocationReports");
                 });
 
             modelBuilder.Entity("Contact.API.Models.Person", b =>

@@ -1,4 +1,5 @@
 ﻿using Contact.API.Data;
+using Contact.API.DTOs;
 using Contact.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,13 +21,25 @@ namespace Contact.API.Controllers
 
         // POST: api/persons/{personId}/contactinfos
         [HttpPost]
-        public async Task<IActionResult> AddContactInfo(Guid personId, [FromBody] ContactInfo contactInfo)
+        public async Task<IActionResult> AddContactInfo(Guid personId, [FromBody] ContactAddDto contactAddDto)
         {
             var person = await _context.Persons.FindAsync(personId);
-            if (person == null) return NotFound($"Person with Id {personId} not found.");
+            if (person == null)
+                return NotFound($"Person with Id {personId} not found.");
 
-            contactInfo.Id = Guid.NewGuid();
-            contactInfo.PersonId = personId;
+
+            var contactType = Enum.TryParse<Models.ContactType>(contactAddDto.Type, ignoreCase: true, out var parsedEnum)
+            ? parsedEnum
+            : Models.ContactType.Location;
+
+            var contactInfo = new ContactInfo
+            {
+                Id = Guid.NewGuid(),
+                PersonId = personId,
+                Type = contactType,
+                Content = contactAddDto.Content
+            };
+
 
             _context.ContactInfos.Add(contactInfo);
             await _context.SaveChangesAsync();
@@ -41,7 +54,8 @@ namespace Contact.API.Controllers
             var contactInfo = await _context.ContactInfos
                 .FirstOrDefaultAsync(ci => ci.Id == id && ci.PersonId == personId);
 
-            if (contactInfo == null) return NotFound();
+            if (contactInfo == null)
+                return NotFound();
 
             return Ok(contactInfo);
         }
@@ -53,12 +67,13 @@ namespace Contact.API.Controllers
             var contactInfo = await _context.ContactInfos
                 .FirstOrDefaultAsync(ci => ci.Id == id && ci.PersonId == personId);
 
-            if (contactInfo == null) return NotFound();
+            if (contactInfo == null)
+            return NotFound(string.Format("No record for personId {0} and id {1} .", personId, id));
 
             _context.ContactInfos.Remove(contactInfo);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(string.Format("record for personId {0} and id {1} was deleted.", personId, id));
         }
     }
 }

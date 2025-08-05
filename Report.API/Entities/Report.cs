@@ -14,6 +14,7 @@ namespace Report.API.Entities
         public DateTime RequestDate { get; set; }
         public ReportStatus Status { get; set; }
 
+        public string Location { get; set; } = null!;
         public ICollection<ReportDetail> Details { get; set; } = new List<ReportDetail>();
     }
 }

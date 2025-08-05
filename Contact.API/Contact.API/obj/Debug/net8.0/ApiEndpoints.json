@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "Contact.API.Controllers.LocationController",
+    "Method": "Stats",
+    "RelativePath": "api/location/{location}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "location",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Contact.API.Controllers.PersonsController",
     "Method": "GetAllPersons",
     "RelativePath": "api/Persons",
@@ -18,8 +34,8 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "person",
-        "Type": "Contact.API.Models.Person",
+        "Name": "dto",
+        "Type": "Contact.API.DTOs.PersonCreateDto",
         "IsRequired": true
       }
     ],
@@ -71,8 +87,8 @@
         "IsRequired": true
       },
       {
-        "Name": "contactInfo",
-        "Type": "Contact.API.Models.ContactInfo",
+        "Name": "contactAddDto",
+        "Type": "Contact.API.DTOs.ContactAddDto",
         "IsRequired": true
       }
     ],
